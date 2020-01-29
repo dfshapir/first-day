@@ -36,7 +36,15 @@ b2 <- babynames %>%
 # Keeping only names in b2
 
 ```{r}
-babynames %>%
-  inner_join(b2, by = "name")
+b3 <- babynames %>%
+  inner_join(b2, by = "name") %>%
+  filter(year %in% c("1880", "2017")) %>%
+  select(-sex) %>%
+  group_by(name, year) %>%
+  mutate(total = sum(n))
+
+ggplot(b3, aes(name, total)) +
+  geom_col() +
+  facet_wrap(~year)
 ```
 
