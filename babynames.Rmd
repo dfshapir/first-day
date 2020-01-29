@@ -1,0 +1,42 @@
+---
+title: "babynames"
+author: "Daniel Shapiro"
+date: "1/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(babynames)
+library(tidyverse)
+```
+
+# My name over time.
+
+```{r}
+b1 <- babynames %>%
+  filter(name == "Daniel") %>%
+  filter(sex == "M") 
+
+ggplot(b1, aes(x = year, y = n)) +
+  geom_col()
+```
+
+# 1000 most popular names in last year.
+
+```{r}
+b2 <- babynames %>%
+  filter(year == "2017") %>%
+  group_by(name) %>%
+  summarize(total = sum(n)) %>%
+  arrange(desc(total)) %>%
+  head(100)
+```
+
+# Keeping only names in b2
+
+```{r}
+babynames %>%
+  inner_join(b2, by = "name")
+```
+
